@@ -1,0 +1,31 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'main', 
+                url: 'https://github.com/omrani-mohamed/Tunext.git'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                sh 'echo "Building..."'
+                // sh 'mvn clean compile'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                sh 'echo "Testing..."'
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                sh 'echo "Deploying..."'
+            }
+        }
+    }
+}
