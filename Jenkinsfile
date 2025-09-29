@@ -25,9 +25,6 @@ pipeline {
             steps {
                 withCredentials([usernamePassword(credentialsId: "${GITHUB_CREDENTIALS}", usernameVariable: 'GIT_USER', passwordVariable: 'GIT_PASS')]) {
                     sh '''
-                        git config user.name "omrani-mohamed"
-                        git config user.email "omrani.mohamedamine@esprit.tn"
-
                         # Clone gh-pages branch (or create it if it doesn’t exist yet)
                         if git ls-remote --exit-code --heads ${GITHUB_REPO} gh-pages; then
                             git clone --branch gh-pages ${GITHUB_REPO} gh-pages
@@ -36,6 +33,11 @@ pipeline {
                             cd gh-pages
                             git checkout --orphan gh-pages
                             git rm -rf .
+
+                            # Configure Git inside gh-pages repo
+                            git config user.name "omrani-mohamed"
+                            git config user.email "omrani.mohamedamine@esprit.tn"
+
                             echo "<h1>GitHub Pages branch initialized</h1>" > index.html
                             git add .
                             git commit -m "Initialize gh-pages branch"
@@ -44,6 +46,10 @@ pipeline {
                         fi
 
                         cd gh-pages
+
+                        # Configure Git inside gh-pages repo (needed for deploy step too)
+                        git config --global user.name "omrani-mohamed"
+                        git config --global user.email "omrani.mohamedamine@esprit.tn"
 
                         # Remove old files
                         rm -rf *
